@@ -20,14 +20,21 @@ private:
     const static int sizeX = 4;
     int MAX = 2048;
     int score = 0;
+    
 public:
     game()
     {
 
     }
+    bool show = true;
     int board[sizeY][sizeX] = { 0 };
     bool something_moved = false;
     int step = 0;
+
+    void set_show(bool show) {
+		this->show = show;
+    }
+	
     void set_max(int max) {
         MAX = max;
     }
@@ -136,7 +143,7 @@ public:
 
     void show_board() {
         //clear_board();
-        
+        if (!(show || is_win() || is_lose())) return;
         for (int i = 0; i < sizeX; i++) {
             cout << "|";
             for (size_t d = 0; d < sizeY-1; d++)
@@ -146,10 +153,14 @@ public:
             cout << dash.substr(1);
 			cout << "|" << endl;
             for (int j = 0; j < sizeY; j++) {
-                cout << "|";
+                if (!(board[i][j] > 100000)) {
+                    cout << "|";
+                }
                 if (board[i][j] != 0) {
+                    if (board[i][j] > 100000)
+                        cout << board[i][j];
                     if (board[i][j] > 10000 && board[i][j] < 100000)
-                        cout << " " << board[i][j];
+                        cout << board[i][j];
                     if (board[i][j] > 1000 && board[i][j] < 10000)
                         cout << " " << board[i][j];
                     if (board[i][j] > 100 && board[i][j] < 1000)
@@ -172,6 +183,7 @@ public:
         }
         cout << "|" << endl;
         cout << "score: " << score << endl;
+		cout << "steps: " << step << endl;
     }
 
     void clear_board() {
@@ -438,28 +450,36 @@ public:
                 c = (c == 's') ? 'd' : 's';
                 g.run(c);
                 ++tick;
-                cout << "move: " << c << endl;
-                cout << "steps: " << tick << endl;
+                if (g.show) {
+                    cout << "move: " << c << endl;
+                    cout << "steps: " << tick << endl;
+                }
             }
 
             if (!g.something_moved) {
                 g.run('a');
                 c = 'a';
                 ++tick;
-                cout << "move: " << c << endl;
-                cout << "steps: " << tick << endl;
+                if (g.show) {
+                    cout << "move: " << c << endl;
+                    cout << "steps: " << tick << endl;
 
+                }
             }
-            if (!g.something_moved) {
-                g.run('w');
-                c = 'w';
-                ++tick;
+                if (!g.something_moved) {
+                    g.run('w');
+                    c = 'w';
+                    ++tick;
+                    if (g.show) {
+                        cout << "move: " << c << endl;
+                        cout << "steps: " << tick << endl;
+                    }
+                }
+            ++tick;
+            if (g.show) {
                 cout << "move: " << c << endl;
                 cout << "steps: " << tick << endl;
             }
-            ++tick;
-            cout << "move: " << c << endl;
-            cout << "steps: " << tick << endl;
             if (g.is_lose()) break;
         }
         g.run('s');
@@ -476,6 +496,7 @@ int main() {
     game g;
     int size; 
     char ch;
+    char show;
     int sizeX;
     int sizeY;
     while (true) {
@@ -483,13 +504,17 @@ int main() {
         cout << "2048" << endl;
         cout << "Rules: type w(up), s(down), a(left), d(right) keys to shift the tiles" << endl;
         cout << "Add tiles with same number to double the value" << endl;
-        cout << "Choose the winning condition (value of the tile to reach) (must be multiple of two)";
+        cout << "Choose the winning condition (value of the tile to reach) (type the exponent (meaning 2^n ... 10 = 2048, 11 = 4096...))" << endl;
         cin >> size;
         cout << "Enter q to quit" << endl;
         cout << "Enter 1 if you want to play on your own" << endl;
         cout << "Enter 2 if you want algorithm1 (naive) to play for you" << endl;
         cin >> ch;
-        g.set_max(size);
+		
+		cout << "Do you want to see all steps, or just the final result? (y/n)" << endl;
+        cin >> show;
+        g.set_max(2 << size);
+        g.set_show(show == 'y');
         switch (ch) {
             case '1':
                 bots::player1(g);
