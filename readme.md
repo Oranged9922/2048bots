@@ -90,4 +90,4 @@ The game will be displayed in console as a grid of rows and columns with aligned
 ### Deadline
 
 * April 30th 2022 -> Deadline for the first submission attempt
-* May 28th 2022 -> Deadline for the last submission attempt including all fixes.
+* May 31st 2022 -> Deadline for the last submission attempt including all fixes.
