@@ -16,8 +16,8 @@ using namespace std;
 class game {
 private:
     const string dash = "------";
-    const static int sizeY = 4;
-    const static int sizeX = 4;
+    const static int sizeY = 8;
+    const static int sizeX = 8;
     int MAX = 2048;
     int score = 0;
     
@@ -38,6 +38,7 @@ public:
     void set_max(int max) {
         MAX = max;
     }
+
     void run(int input = -1)  {
         char ch, c;
         show_board();

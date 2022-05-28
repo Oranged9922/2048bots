@@ -18,6 +18,9 @@ NPRG041
 * 19.11.2021 - Lukáš Salak, version 0.1.0.
 * 21.11.2021 - Lukáš Salak, added deadline dates
 * 21.11.2021 - Lukáš Salak, version 0.1.1.
+* 27.04.2022 - Lukáš Salak, added todo, changed deadline date
+* 27.04.2022 - Lukáš Salak, version 0.2.0.
+
 
 ------
 
@@ -32,10 +35,24 @@ Create a console application that will allow user to play well-known game 2048 (
 ​	Console argument interface:
 
 * `--help`(provides list of all parameters)
+
 * `-d x, y` (-d as dimensions of 2D grid (rows, cols))
+
 * `-pmode (autoplay1,...,autoplayN, player)` (sets mode of the game - whether an heuristic algorithm should play or if player wants to play)
+
 * `-allowHints (0 / 1)`(sets hint for next move (calculated with default heuristic algorithm))
+
 * **TODO** - other arguments tbd (if necessary)
+
+    
+
+    **TODO** : 
+
+    -   cli parser (external lib)
+    -   polymorphism (rewrite bots class)
+    -   implement three more bots
+    -   evaluation of bots
+    -   add test framework
 
 ------
 
