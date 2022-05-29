@@ -137,8 +137,8 @@ using namespace std;
 
     int main(int argc, char* argv[]) {
         argparse::ArgumentParser parser("2048 game");
-        parser.add_argument("--sizeX").help("set size of game field X").default_value(4);
-        parser.add_argument("--sizeY").help("set size of game field Y").default_value(4);
+        parser.add_argument("--sizeX").help("set size of game field X").default_value(4).implicit_value(4);
+        parser.add_argument("--sizeY").help("set size of game field Y").default_value(4).implicit_value(4);
         parser.add_argument("--max").help("set max tile for win condition").default_value(2048);
         parser.add_argument("--bots").help("set bot, values: human, randomBot, cornerBot, minmaxBot").default_value(std::string{ "human" });
         parser.add_argument("--comparison-repeat").help("how many times comparison will run, only works with --comparison argument");
@@ -151,11 +151,24 @@ using namespace std;
             exit(1);
         }
 
+        int x = 4;
+        int y = 4;
+        int max = 2048;
         game g;
         vector<vector<int>> board;
-        board.resize(stoi(parser.get("--sizeY")), vector<int>(stoi(parser.get("--sizeX")), 0));
+        if (parser.is_used("--sizeY")) {
+            y = stoi(parser.get("--sizeY"));
+        }
+        if (parser.is_used("--sizeX")) {
+            x = stoi(parser.get("--sizeX"));
+        }
+        if (parser.is_used("--max")) {
+            max = stoi(parser.get("--max"));
+        }
+        
+		board.resize(y, vector<int>(x, 0));
         g.set_board(board);
-        g.set_max(stoi(parser.get("--max")));
+        g.set_max(max);
 
         if (parser.is_used("--comparison-repeat")) {
             int repeat = 1000;
