@@ -98,6 +98,11 @@ using namespace std;
             if (c == 'a') dir = 2;
             if (c == 's') dir = 3;
             g.move(dir);
+            if ((g.is_win() || g.is_lose())) {
+                clear_console();
+                g.display();
+                break;
+            }
             clear_console();
             g.display();
         }
@@ -160,7 +165,7 @@ using namespace std;
         parser.add_argument("--sizeY").help("set size of game field Y").default_value(4);
         parser.add_argument("--max").help("set max tile for win condition").default_value(2048);
         parser.add_argument("--bots").help("set bot, values: human, randomBot, cornerBot, minmaxBot").default_value(std::string{ "human" });
-        parser.add_argument("--comparison-repeat").help("how many times comparison will run, only works with --comparison argument");
+        parser.add_argument("--comparison-repeat").help("comparison, how many times will it run");
         parser.add_argument("--show").help("shows all steps when bot is chosen").default_value(false);
 
         try {
@@ -176,6 +181,10 @@ using namespace std;
         int y = 4;
         int max = 2048;
         game g;
+
+        if (x > 50) { cout << "x set too large, maximum 50" << endl; return 0; }
+		if (y > 50) { cout << "y set too large, maximum 50" << endl; return 0; }
+		
         vector<vector<int>> board;
         if (parser.is_used("--sizeY")) {
             y = stoi(parser.get("--sizeY"));
