@@ -103,6 +103,7 @@ inline void game::restart() {
 inline tuple<int,int> game::get_board_size() {
 	return make_tuple(sizeX, sizeY);
 }
+
 inline void game::set_board(vector<vector<int>> board) {
 	this->board = board;
 	this->sizeX = board[0].size();
