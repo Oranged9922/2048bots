@@ -12,6 +12,14 @@ namespace gameTests {
 	TEST(Game, Constructor_initialization_8x6) {
 		game game(8, 6);
 		EXPECT_EQ(game.get_board_size(), make_tuple(8, 6));
+		game.restart();
+		EXPECT_EQ(game.free_spaces(), (8 * 6) - 2);		
+	}
+	TEST(Game, Constructor_initialization_6x8) {
+		game game(6, 8);
+		EXPECT_EQ(game.get_board_size(), make_tuple(6, 8));
+		game.restart();
+		EXPECT_EQ(game.free_spaces(), (8 * 6) - 2);
 	}
 	TEST(Game, Constructor_initialization_max) {
 		game game(8, 6,4096);
@@ -376,10 +384,10 @@ namespace gameTests {
 	TEST(Game_shift, test_down_2) {
 		game game;
 		game.set_board(vector<vector<int>>{
-			{2,4,8,16},
-			{0,0,4,8},
-			{0,0,0,4},
-			{0,0,2,2} });
+			{2, 4, 8, 16},
+			{ 0,0,4,8 },
+			{ 0,0,0,4 },
+			{ 0,0,2,2 } });
 		game.shift(3);
 		EXPECT_EQ(game.get_tile(0, 0), 0);
 		EXPECT_EQ(game.get_tile(0, 1), 0);
@@ -400,6 +408,36 @@ namespace gameTests {
 		EXPECT_EQ(game.get_tile(3, 1), 4);
 		EXPECT_EQ(game.get_tile(3, 2), 2);
 		EXPECT_EQ(game.get_tile(3, 3), 2);
+	}
+	
+	TEST(Game_shift, cant_shift_lose) {
+		game game;
+		game.set_board(vector<vector<int>>{
+			{2, 4, 8, },
+			{ 4, 2, 4, },
+			{ 2, 4, 2, }
+		});
+		EXPECT_EQ(game.can_shift(0), false);
+		EXPECT_EQ(game.can_shift(1), false);
+		EXPECT_EQ(game.can_shift(2), false);
+		EXPECT_EQ(game.can_shift(3), false);
+		EXPECT_EQ(game.is_lose(), true);
+		EXPECT_EQ(game.is_win(), false);
+	}
+
+	TEST(Game_shift, cant_shift_win) {
+		game game;
+		game.set_board(vector<vector<int>>{
+			{2, 2048, 8, },
+			{ 4, 2, 4, },
+			{ 2, 4, 2, }
+		});
+		EXPECT_EQ(game.can_shift(0), false);
+		EXPECT_EQ(game.can_shift(1), false);
+		EXPECT_EQ(game.can_shift(2), false);
+		EXPECT_EQ(game.can_shift(3), false);
+		EXPECT_EQ(game.is_win(), true);
+		EXPECT_EQ(game.is_lose(), false);
 	}
 
 	// tests for winning/losing conditions
