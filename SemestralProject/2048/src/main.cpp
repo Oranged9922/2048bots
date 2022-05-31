@@ -25,7 +25,7 @@ using namespace std;
     }
     bool show;
 
-    void run_comparison(int repeat) {
+    void run_comparison(int repeat, int x, int y) {
         vector<pair<string, function<int(game&)>>> delegates;
         //    connectingTiles = 1,
         //    emptyTiles = 2,
@@ -60,7 +60,7 @@ using namespace std;
 
         comparer c;
         c.bots = delegates;
-        auto results = c.calculate_results(repeat);
+        auto results = c.calculate_results(repeat, y, x);
         cout << "Results:" << endl;
         cout << endl;
         for (auto& r : results) {
@@ -196,7 +196,7 @@ using namespace std;
             int repeat = 1000;
             auto r = parser.get("--comparison-repeat");
             repeat = stoi(r);
-            run_comparison(repeat);
+            run_comparison(repeat, x, y);
             return 0;
         }
 
