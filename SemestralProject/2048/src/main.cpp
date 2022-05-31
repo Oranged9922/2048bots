@@ -23,7 +23,8 @@ using namespace std;
         system("CLS");
 #endif
     }
-	
+    bool show;
+
     void run_comparison(int repeat) {
         vector<pair<string, function<int(game&)>>> delegates;
         //    connectingTiles = 1,
@@ -104,7 +105,12 @@ using namespace std;
     void run_randomBot(game& g) {
         g.restart();
         while (!g.is_lose() || g.is_win()) {
-            g.move(randomBot::getMove(g));
+            int m = randomBot::getMove(g);
+            g.move(m);
+            if (show) {
+                g.display();
+                cout << "Move: " << m << endl;
+            }
         }
         if (g.is_win())
             cout << "won" << endl;
@@ -114,7 +120,13 @@ using namespace std;
     void run_cornerBot(game& g) {
         g.restart();
         while (!g.is_lose() || g.is_win()) {
-            g.move(cornerBot::getMove(g));
+            int m = cornerBot::getMove(g);
+            g.move(m);
+            if (show) {
+                g.display();
+                cout << "Move: " << m << endl;
+            }
+
         }
         if (g.is_win())
             cout << "won" << endl;
@@ -124,10 +136,13 @@ using namespace std;
     void run_minmaxBot(game& g) {
         g.restart();
         while (!g.is_lose() || g.is_win()) {
-            int m = minmaxBot<4,7,831>::getMove(g);
-            cout << "Move: " << m << endl;
+            int m = minmaxBot<5,7,831>::getMove(g);
             g.move(m);
-            g.display();
+            if (show) {
+                g.display();
+                cout << "Move: " << m << endl;
+                }
+
         }
         if (g.is_win())
             cout << "won" << endl;
@@ -137,11 +152,14 @@ using namespace std;
 
     int main(int argc, char* argv[]) {
         argparse::ArgumentParser parser("2048 game");
-        parser.add_argument("--sizeX").help("set size of game field X").default_value(4).implicit_value(4);
-        parser.add_argument("--sizeY").help("set size of game field Y").default_value(4).implicit_value(4);
+        parser.add_argument("").default_value("With no arguments, the game starts with default values");
+        parser.add_argument("--sizeX").help("set size of game field X").default_value(4);
+        parser.add_argument("--sizeY").help("set size of game field Y").default_value(4);
         parser.add_argument("--max").help("set max tile for win condition").default_value(2048);
         parser.add_argument("--bots").help("set bot, values: human, randomBot, cornerBot, minmaxBot").default_value(std::string{ "human" });
         parser.add_argument("--comparison-repeat").help("how many times comparison will run, only works with --comparison argument");
+        parser.add_argument("--show").help("shows all steps when bot is chosen").default_value(false);
+
         try {
             parser.parse_args(argc, argv);
         }
@@ -150,7 +168,7 @@ using namespace std;
             cerr << parser;
             exit(1);
         }
-
+        show = parser.is_used("--show");
         int x = 4;
         int y = 4;
         int max = 2048;
@@ -166,7 +184,8 @@ using namespace std;
             max = stoi(parser.get("--max"));
         }
         
-		board.resize(y, vector<int>(x, 0));
+        board = vector<vector<int>>(y,vector<int>(x, 0));
+
         g.set_board(board);
         g.set_max(max);
 
