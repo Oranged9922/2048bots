@@ -69,21 +69,21 @@ public:
 };
 
 inline game::game() {
-    board.resize(sizeY, vector<int>(sizeX, 0));
+    board.resize(sizeX, vector<int>(sizeY, 0));
 }
 inline game::game(int max) {
-	board.resize(sizeY, vector<int>(sizeX, 0));
+	board.resize(sizeX, vector<int>(sizeY, 0));
 	MAX = max;
 }
 inline game::game(int x, int y) {
-    sizeX = x;
-    sizeY = y;
-    board.resize(sizeY, vector<int>(sizeX, 0));
+    sizeY = x;
+    sizeX = y;
+    board.resize(sizeX, vector<int>(sizeY, 0));
 }
 inline game::game(int x, int y, int max) {
-	sizeX = x;
-	sizeY = y;
-	board.resize(sizeY, vector<int>(sizeX, 0));
+	sizeY = x;
+	sizeX = y;
+	board.resize(sizeX, vector<int>(sizeY, 0));
 	MAX = max;
 }
 
@@ -92,7 +92,7 @@ inline void game::restart() {
 		std::chrono::high_resolution_clock::now().time_since_epoch())
 		.count());
 	this->board.clear(); 
-	this->board.resize(sizeY, vector<int>(sizeX, 0));
+	this->board.resize(sizeX, vector<int>(sizeY, 0));
 	score = 0;
 	step = 0;
 	this->place_new_tile();
@@ -101,14 +101,15 @@ inline void game::restart() {
 }
 
 inline tuple<int,int> game::get_board_size() {
-	return make_tuple(sizeX, sizeY);
+	return make_tuple(sizeY, sizeX);
 }
 
 inline void game::set_board(vector<vector<int>> board) {
 	this->board = board;
-	this->sizeX = board[0].size();
-	this->sizeY = board.size();
+	this->sizeY = board[0].size();
+	this->sizeX = board.size();
 }
+
 inline int game::get_step() {
 	return step;
 }
@@ -138,15 +139,13 @@ inline bool game::can_shift(int dir) {
 			return false;
     }
 }
+
 inline bool game::can_shift_right() {
-	if(result_can_shift_right != -1) return result_can_shift_right;
-	for (int i = 0; i < sizeX; i++) 
-	{
-		int index = sizeX - 1;
+	for (int i = 0; i < sizeX; i++) {
+		int index = sizeY - 1;
 		for (int j = sizeY - 1; j >= 0; j--) {
 			if (board[i][j] != 0) {
 				if (j != index) {
-					result_can_shift_right = 1;
 					return true;
 				}
 				index--;
@@ -159,29 +158,25 @@ inline bool game::can_shift_right() {
 				continue;
 			else {
 				if (board[i][j] == board[i][j - 1]) {
-					result_can_shift_right = 1;
 					return true;
 				}
 			}
 		}
 	}
 	for (int i = 0; i < sizeX; i++) {
-		int index = sizeX - 1;
+		int index = sizeY - 1;
 		for (int j = sizeY - 1; j >= 0; j--) {
 			if (board[i][j] != 0) {
 				if (j != index) {
-					result_can_shift_right = 1;
 					return true;
 				}
 				index--;
 			}
 		}
 	}
-	result_can_shift_right = 0;
 	return false;
 }
 inline bool game::can_shift_left() {
-	if (result_can_shift_left != -1) return result_can_shift_left;
 	for (int i = 0; i < sizeX; i++)
 	{
 		int index = 0;
@@ -191,7 +186,6 @@ inline bool game::can_shift_left() {
 			{
 				if (j != index)
 				{
-					result_can_shift_left = 1;
 					return true;
 				}
 				index++;
@@ -199,13 +193,12 @@ inline bool game::can_shift_left() {
 		}
 	}
 	for (int i = 0; i < sizeX; i++) {
-		for (int j = 0; j < sizeY -1; j++) {
+		for (int j = 0; j < sizeY - 1; j++) {
 			if (board[i][j] == 0)
 				continue;
 			else
 			{
 				if (board[i][j] == board[i][j + 1]) {
-					result_can_shift_left = 1;
 					return true;
 				}
 			}
@@ -220,45 +213,40 @@ inline bool game::can_shift_left() {
 			{
 				if (j != index)
 				{
-					result_can_shift_left = 1;
 					return true;
 				}
 				index++;
 			}
 		}
 	}
-	result_can_shift_left = 0;
 	return false;
 }
 inline bool game::can_shift_up() {
-	if(result_can_shift_up != -1) return result_can_shift_up;
 	for (int i = 0; i < sizeY; i++)
 	{
 		int index = 0;
-		for (int j = 0; j < sizeX ; j++)
+		for (int j = 0; j < sizeX; j++)
 		{
-		    if (board[j][i] != 0)
-		    {
-		        if (j != index)
-		        {
-					result_can_shift_up = 1;
-		            return true;
-		        }
-		        index++;
-		    }
+			if (board[j][i] != 0)
+			{
+				if (j != index)
+				{
+					return true;
+				}
+				index++;
+			}
 		}
 	}
 	for (int i = 0; i < sizeY; i++) {
-		for (int j = 0; j < sizeX -1; j++) {
-		    if (board[j][i] == 0)
-		        continue;
-		    else
-		    {
-		        if (board[j][i] == board[j + 1][i]) {
-					result_can_shift_up = 1;
-		            return true;
-		        }
-		    }
+		for (int j = 0; j < sizeX - 1; j++) {
+			if (board[j][i] == 0)
+				continue;
+			else
+			{
+				if (board[j][i] == board[j + 1][i]) {
+					return true;
+				}
+			}
 		}
 	}
 	for (int i = 0; i < sizeY; i++)
@@ -266,64 +254,57 @@ inline bool game::can_shift_up() {
 		int index = 0;
 		for (int j = 0; j < sizeX; j++)
 		{
-		    if (board[j][i] != 0)
-		    {
-		        if (j != index)
-		        {
-					result_can_shift_up = 1;
-		            return true;
-		        }
-		        index++;
-		    }
+			if (board[j][i] != 0)
+			{
+				if (j != index)
+				{
+					return true;
+				}
+				index++;
+			}
 		}
 	}
-	result_can_shift_up = 0;
 	return false;
 }
 inline bool game::can_shift_down() {
-	if (result_can_shift_down != -1) return result_can_shift_down;
 	for (int i = 0; i < sizeY; i++)
 	{
 		int index = sizeY - 1;
-		for (int j = sizeX - 1; j >= 0; j--) 
+		for (int j = sizeX - 1; j >= 0; j--)
 		{
-		    if (board[j][i] != 0) 
-		    {
-		        if (j != index)
-		        {
-					result_can_shift_down = 1;
-		            return true;
-		        }
-		        index--;
-		    }
-		}
-	}		
-	for (int i = 0; i < sizeY; i++) {
-		for (int j = sizeX - 1; j>0; j--) {
-		    if(board[j][i] == 0)
-				continue;
-		    else 
-		    {
-		        if (board[j][i] == board[j - 1][i]) {
-					result_can_shift_down = 1;
-		            return true;
-		        }
-		    }
+			if (board[j][i] != 0)
+			{
+				if (j != index)
+				{
+					return true;
+				}
+				index--;
+			}
 		}
 	}
 	for (int i = 0; i < sizeY; i++) {
-		int index = sizeY - 1; 
-		for (int j = sizeX - 1; j >= 0; j--) {
-		    if (board[j][i] != 0) {
-		        if (j != index) {
-					result_can_shift_down = 1;
-		            return true;
-		        }
-		        index--;
-		    }
+		for (int j = sizeX - 1; j > 0; j--) {
+			if (board[j][i] == 0)
+				continue;
+			else
+			{
+				if (board[j][i] == board[j - 1][i]) {
+					return true;
+				}
+			}
 		}
-	}       
-	result_can_shift_down = 0;
+	}
+	for (int i = 0; i < sizeY; i++) {
+		int index = sizeY - 1;
+		for (int j = sizeX - 1; j >= 0; j--) {
+			if (board[j][i] != 0) {
+				if (j != index) {
+					return true;
+				}
+				index--;
+			}
+		}
+	}
 	return false;
 }
 
@@ -381,7 +362,7 @@ inline void game::reset_results() {
 }
 inline bool game::is_lose() {
 	if (result_is_lose != -1) return result_is_lose;
-	result_is_lose = !this->can_shift_up() && !this->can_shift_down() && !this->can_shift_left() && !this->can_shift_right();
+	result_is_lose = !(this->can_shift(0) || this->can_shift(1) || this->can_shift(2) || this->can_shift(3)) && !this->is_win();
 	return result_is_lose;
 }
 inline bool game::is_win() {
@@ -476,7 +457,7 @@ inline void game::shift_left() {
 }
 inline void game::shift_right() {
 	for (int i = 0; i < sizeX; i++) {
-		int index = sizeX - 1;
+		int index = sizeY - 1;
 		for (int j = sizeY - 1; j >= 0; j--) {
 			if (board[i][j] != 0) {
 				if (j != index) {
@@ -501,7 +482,7 @@ inline void game::shift_right() {
 		}
 	}
 	for (int i = 0; i < sizeX; i++) {
-		int index = sizeX - 1;
+		int index = sizeY - 1;
 		for (int j = sizeY - 1; j >= 0; j--) {
 			if (board[i][j] != 0) {
 				if (j != index) {
