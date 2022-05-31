@@ -104,10 +104,11 @@ using namespace std;
     }
     void run_randomBot(game& g) {
         g.restart();
-        while (!g.is_lose() || g.is_win()) {
+        while (!(g.is_win() || g.is_lose())) {
             int m = randomBot::getMove(g);
             g.move(m);
             if (show) {
+                clear_console();
                 g.display();
                 cout << "Move: " << m << endl;
             }
@@ -119,10 +120,11 @@ using namespace std;
     }
     void run_cornerBot(game& g) {
         g.restart();
-        while (!g.is_lose() || g.is_win()) {
+        while (!(g.is_win() || g.is_lose())) {
             int m = cornerBot::getMove(g);
             g.move(m);
             if (show) {
+                clear_console();
                 g.display();
                 cout << "Move: " << m << endl;
             }
@@ -135,10 +137,11 @@ using namespace std;
     }
     void run_minmaxBot(game& g) {
         g.restart();
-        while (!g.is_lose() || g.is_win()) {
+        while (!(g.is_win() || g.is_lose())) {
             int m = minmaxBot<5,7,831>::getMove(g);
             g.move(m);
             if (show) {
+                clear_console();
                 g.display();
                 cout << "Move: " << m << endl;
                 }
