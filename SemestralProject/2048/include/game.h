@@ -269,7 +269,7 @@ inline bool game::can_shift_up() {
 inline bool game::can_shift_down() {
 	for (int i = 0; i < sizeY; i++)
 	{
-		int index = sizeY - 1;
+		int index = sizeX - 1;
 		for (int j = sizeX - 1; j >= 0; j--)
 		{
 			if (board[j][i] != 0)
@@ -295,7 +295,7 @@ inline bool game::can_shift_down() {
 		}
 	}
 	for (int i = 0; i < sizeY; i++) {
-		int index = sizeY - 1;
+		int index = sizeX - 1;
 		for (int j = sizeX - 1; j >= 0; j--) {
 			if (board[j][i] != 0) {
 				if (j != index) {
@@ -545,7 +545,7 @@ inline void game::shift_up() {
 inline void game::shift_down() {
 	for (int i = 0; i < sizeY; i++) 
 	{
-		int index = sizeY - 1;
+		int index = sizeX - 1;
 		for (int j = sizeX - 1; j >= 0; j--) 
 		{
 			if (board[j][i] != 0) 
@@ -574,7 +574,7 @@ inline void game::shift_down() {
 		}
 	}
 	for (int i = 0; i < sizeY; i++) {
-		int index = sizeY - 1; 
+		int index = sizeX - 1; 
 		for (int j = sizeX - 1; j >= 0; j--) {
 			if (board[j][i] != 0) {
 				if (j != index) {
