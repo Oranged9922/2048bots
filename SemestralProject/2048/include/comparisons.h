@@ -28,11 +28,11 @@ public:
 	vector<pair<string,function<int(game&)>>> bots;
     comparer(){}
 	
-    vector<result> calculate_results(int repeats);
+    vector<result> calculate_results(int repeats, int x, int y);
 	
 };
 
-inline vector<result> comparer::calculate_results(int repeats)
+inline vector<result> comparer::calculate_results(int repeats, int x, int y)
 {
 	vector<result> results;
 	for (auto& func : bots)
@@ -45,6 +45,7 @@ inline vector<result> comparer::calculate_results(int repeats)
 		for (int i = 0; i < repeats; i++)
 		{
 			game g;
+			g.set_board(vector<vector<int>>(x, vector<int>(y, 0)));
 			g.restart();
 			bool win = false;
 			std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
