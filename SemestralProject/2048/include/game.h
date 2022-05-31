@@ -5,6 +5,7 @@
 */
 #include <chrono>
 #include <vector>
+#include <tuple>
 using namespace std;
 
 class game {
